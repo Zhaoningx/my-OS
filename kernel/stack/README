@@ -1,3 +1,0 @@
-*plan:
-1. detect that the (), [], and {} are correct in C file by using stack.
-2. changing the zephyr/kernel/stack.c from static stack to link-stack.
