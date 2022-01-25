@@ -21,19 +21,6 @@ typedef unsigned int uint32_t;
  * 
  */
 
-struct common_list {
-    union {
-        struct common_list *head;
-        struct common_list *next;
-    };
-    union {
-        struct common_list *tail;
-        struct common_list *prev;
-    };
-    
-    
-};
-
 /* static link-list */
 typedef uint32_t static_link_t;
 typedef struct {
@@ -54,19 +41,24 @@ struct single_list{
 
 typedef struct single_list single_list_t;
 
-
-
-
-
-
-
-
-
-struct dlist {
-    uint32_t * per;
-    uint32_t * next;
+/* double link-list */
+struct double_list {
+    union {
+        struct double_list *head;
+        struct double_list *next;
+    };
+    union {
+        struct double_list *tail;
+        struct double_list *prev;
+    };
 };
 
+typedef struct double_list double_list_t;
+typedef struct double_list dlist_node_t;
+
+
+
+/* wait for implementing */
 struct stack {
     uint32_t * buffer;
     uint32_t *top, *next, *base;
@@ -95,6 +87,9 @@ bool popStaticList(static_link *pbuffer, static_link_t node, void **data);
 void showStaticList(static_link *pbuffer, static_link_t size);
 
 /* double list */
-
+void initDoubleList(double_list_t *dlist);
+void insertDoubleList(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node);
+void popDoubleList(double_list_t *dlist, bool tail, void **data);
+void showDoubleList(double_list_t *dlist);
 
 #endif /* _KERNEL_H_ */

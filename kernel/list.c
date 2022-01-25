@@ -1,4 +1,4 @@
-#include <kernel.h>
+#include "kernel.h"
 
 /**
  * @brief Static list
@@ -94,31 +94,6 @@ void showStaticList(static_link *pbuffer, static_link_t size)
     
 }
 
-#if 0
-#define BUFFERSIZE 20
-int main(void)
-{
-    static_link buffer[BUFFERSIZE];
-    static_link *pbuffer = buffer;
-
-    initStaticList(pbuffer, (static_link_t)BUFFERSIZE);
-    showStaticList(pbuffer, (static_link_t)BUFFERSIZE);
-    printf("============================\n");
-    uint32_t data[] = {22,33,44,55,66,77,88,99,11,00, 22,33,44,55,66,77,88,99,11,00};
-    printf("data[6]%p\n", &data[6]);
-    for (int i = 0; i < 20; i++) {
-        insertStaticList(pbuffer, (void *)&data[i]);
-    }
-    showStaticList(pbuffer, (static_link_t)BUFFERSIZE);
-    printf("============================\n");;
-    uint32_t a = 100;
-    uint32_t *data1 = &a; 
-    popStaticList(pbuffer, 2,(void **) &data1);
-    printf("data = %d\n", *data1);
-    showStaticList(pbuffer, (static_link_t)BUFFERSIZE);
-}
-#endif
-
 /**
  * @brief Single link-list
  * 
@@ -203,51 +178,91 @@ void showSingleList(single_list_t *slist)
     }
 }
 
-
-#if 0
-#define SINGLESIZE 20
-int main(void)
+void initDoubleList(double_list_t *dlist)
 {
-    single_list_t test_list;
-    struct slist_container {
-        single_node_t node;
-        void *data;
-    };
-
-    struct slist_container node[SINGLESIZE];
-    struct slist_container *pnode = node;
-    uint32_t data[] = {11,22,33,44,55,66,77,88,99,111,222,333,444,555,666,777,888,999,1111,2222, 3333};
-
-    for (int i = 0; i < SINGLESIZE; i++) {
-        pnode[i].data = (void *)&data[i];
-        pnode[i].node.next = NULL;
-    }
-
-    initSingleList(&test_list);
-    for (int i = 0; i < SINGLESIZE; i++) {
-        printf("data addr: %p\n", &node[i]);
-        insertAtSingleList(&test_list, NULL, &pnode[i].node);
-    }
-    showSingleList(&test_list);
-    printf("=======\n");
-
-    struct slist_container node_at;
-    node_at.data = &data[20];
-    node_at.node.next = NULL;
-
-    insertAtSingleList(&test_list, &pnode[0].node, &node_at.node);
-    showSingleList(&test_list);
-    printf("=======\n");
-
-    single_node_t *pdata = NULL;
-    popSingleList(&test_list, false, (void **)&pdata);
-    printf("pdata = %p\n", pdata);
-    showSingleList(&test_list);
-    printf("=======\n");
-
-    popSingleList(&test_list, true, (void **)&pdata);
-    printf("pdata = %p\n", pdata);
-    showSingleList(&test_list);
-    printf("=======\n");
+    dlist->head = NULL;
+    dlist->tail = NULL;
 }
-#endif
+
+/**
+ * @brief double link-list
+ * 
+ * @return NA
+ */
+void insertDoubleList(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node)
+{
+    dlist_node_t *phead = dlist->head;
+    bool flag = false;
+
+    if (dlist->head == NULL && dlist->tail == NULL) {
+        /* the double is empty */
+        node->next = NULL;
+        node->prev = NULL;
+        dlist->head = node;
+        dlist->tail = node;
+        return;
+    }
+
+    if (at == NULL || at == dlist->tail) {
+        /* insert data in the dlist tail */
+        dlist->tail->next = node;
+        node->next = NULL;
+        node->prev = dlist->tail;
+        /* move tail to new node */
+        dlist->tail = node;
+    } else {
+        while (phead->next != NULL) {
+            if (phead == at) {
+                flag = true;
+            }
+            phead = phead->next;
+        }
+
+        if (flag) {
+            node->next = at->next;
+            at->next->prev = node;
+            at->next = node;
+            node->prev = at;
+        } else {
+            printf("ERROR: 'at' node is not exsit\n");
+            return;
+        }
+    }
+}
+
+void popDoubleList(double_list_t *dlist, bool tail, void **data)
+{
+    if (dlist->head == NULL) {
+        printf("dlist is empty\n");
+        return;
+    }
+
+    if (tail) {
+        /* pop data from the dlist tail */
+        *data = dlist->tail;
+        dlist->tail = dlist->tail->prev;
+        dlist->tail->next = NULL;
+    } else {
+        /* pop data from the dlist head */
+        *data = dlist->head;
+        dlist->head = dlist->head->next;
+        dlist->head->prev = NULL;
+    }
+}
+
+void showDoubleList(double_list_t *dlist)
+{
+    double_list_t *phead = dlist->head;
+    int i = 0;
+
+    if (phead == NULL) {
+        printf("dlist is empty\n");
+        return;
+    }
+
+    while (phead) {
+        printf("dlist node %d: %p\n", i, phead);
+        phead = phead->next;
+        i++;
+    }
+}
