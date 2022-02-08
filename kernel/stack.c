@@ -1,13 +1,13 @@
 #include "kernel.h"
 
-void initStack(k_stack_t *stack, stack_data_t *buffer, uint32_t size)
+void k_stack_init(k_stack_t *stack, stack_data_t *buffer, uint32_t size)
 {
     stack->base = stack->next = buffer;
     stack->top = stack->base + size;
     stack->stack_size = size;
 }
 
-void pushStack(k_stack_t *stack, stack_data_t data)
+void k_stack_push(k_stack_t *stack, stack_data_t data)
 {
     if (stack->next >= stack->top) {
         stack->next = stack->top;
@@ -20,7 +20,7 @@ void pushStack(k_stack_t *stack, stack_data_t data)
     stack->next ++;
 }
 
-void popStack(k_stack_t *stack, stack_data_t *data)
+void k_stack_pop(k_stack_t *stack, stack_data_t *data)
 {
     if (stack->next <= stack->base) {
         stack->next = stack->base;
@@ -32,7 +32,7 @@ void popStack(k_stack_t *stack, stack_data_t *data)
     *data = *(stack->next);
 }
 
-void readStack(k_stack_t *stack)
+void k_stack_temp_show(k_stack_t *stack)
 {
     stack_data_t *pbase = stack->base;
 

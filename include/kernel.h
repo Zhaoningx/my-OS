@@ -22,24 +22,27 @@ typedef unsigned int uint32_t;
  */
 
 /* static link-list */
-typedef uint32_t static_link_t;
-typedef struct {
-    static_link_t next;
+typedef uint32_t k_static_node_t;
+
+struct static_link {
+    k_static_node_t next;
     void *data;
-}static_link;
+};
+
+typedef struct static_link k_static_link_t;
 
 /* single link-list */
 struct single_node {
     struct single_node *next;
 };
 
-typedef struct single_node single_node_t;
+typedef struct single_node k_snode_t;
 
 struct single_list{
-    single_node_t *tail, *head;
+    k_snode_t *tail, *head;
 };
 
-typedef struct single_list single_list_t;
+typedef struct single_list k_slist_t;
 
 /* double link-list */
 struct double_list {
@@ -67,37 +70,40 @@ struct stack {
 
 typedef struct stack k_stack_t;
 
-/* dynamic stack */
-struct link_stack {
-    uint32_t *base, *next, *top;
-    uint32_t linksize;
+/* static queue */
+
+struct queue {
+    struct queue *head, *tail;
+    void *data;
 };
+
+typedef struct queue k_queue_t;
 
 /**
  * @brief function define
  * 
  */
 /* static list */
-void initStaticList(static_link *pbuffer, static_link_t size);
-void insertStaticList(static_link *pbuffer, void *data);
-bool popStaticList(static_link *pbuffer, static_link_t node, void **data);
-void showStaticList(static_link *pbuffer, static_link_t size);
+void k_static_list_init(k_static_link_t *pbuffer, k_static_node_t size);
+void k_static_list_insert(k_static_link_t *pbuffer, void *data);
+bool k_static_list_get(k_static_link_t *pbuffer, k_static_node_t node, void **data);
+void k_static_list_temp_show(k_static_link_t *pbuffer, k_static_node_t size);
 
 /* single list */
-void initStaticList(static_link *pbuffer, static_link_t size);
-void insertStaticList(static_link *pbuffer, void *data);
-bool popStaticList(static_link *pbuffer, static_link_t node, void **data);
-void showStaticList(static_link *pbuffer, static_link_t size);
+void k_slist_init(k_slist_t *slist);
+void k_slist_insert_at(k_slist_t *slist, k_snode_t *at, k_snode_t *node);
+void k_slist_get(k_slist_t *slist, bool tail, void **data);
+void k_slist_temp_show(k_slist_t *slist);
 
 /* double list */
-void initDoubleList(double_list_t *dlist);
-void insertDoubleList(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node);
-void popDoubleList(double_list_t *dlist, bool tail, void **data);
-void showDoubleList(double_list_t *dlist);
+void k_dlist_init(double_list_t *dlist);
+void k_dlist_insert_at(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node);
+void k_dlist_get(double_list_t *dlist, bool tail, void **data);
+void k_dlist_temp_show(double_list_t *dlist);
 
 /* static stack */
-void initStack(k_stack_t *stack, stack_data_t *buffer, uint32_t size);
-void pushStack(k_stack_t *stack, stack_data_t data);
-void popStack(k_stack_t *stack, stack_data_t *data);
-void readStack(k_stack_t *stack);
+void k_stack_init(k_stack_t *stack, stack_data_t *buffer, uint32_t size);
+void k_stack_push(k_stack_t *stack, stack_data_t data);
+void k_stack_pop(k_stack_t *stack, stack_data_t *data);
+void k_stack_temp_show(k_stack_t *stack);
 #endif /* _KERNEL_H_ */

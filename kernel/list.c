@@ -8,9 +8,9 @@
  * the used space with data is in the another link list, and the head is arr[1]
  * @return NA
  */
-void initStaticList(static_link *pbuffer, static_link_t size)
+void k_static_list_init(k_static_link_t *pbuffer, k_static_node_t size)
 {
-    static_link_t index = 0;
+    k_static_node_t index = 0;
     for (; index < size; index++) {
         pbuffer[index].next = index + 1;
         pbuffer[index].data = NULL;
@@ -21,7 +21,7 @@ void initStaticList(static_link *pbuffer, static_link_t size)
     pbuffer[1].next = 0;
 }
 
-void insertStaticList(static_link *pbuffer, void *data)
+void k_static_list_insert(k_static_link_t *pbuffer, void *data)
 {
     uint32_t space;
     uint32_t i = 1;
@@ -41,10 +41,10 @@ void insertStaticList(static_link *pbuffer, void *data)
     pbuffer[i].next = space;
 }
 
-bool popStaticList(static_link *pbuffer, static_link_t node, void **data)
+bool k_static_list_get(k_static_link_t *pbuffer, k_static_node_t node, void **data)
 {
-    static_link_t i;
-    static_link_t pre;
+    k_static_node_t i;
+    k_static_node_t pre;
     bool flag = false;
 
     if (!pbuffer[1].next || node == 1) {
@@ -85,13 +85,12 @@ bool popStaticList(static_link *pbuffer, static_link_t node, void **data)
     return flag;
 }
 
-void showStaticList(static_link *pbuffer, static_link_t size)
+void k_static_list_temp_show(k_static_link_t *pbuffer, k_static_node_t size)
 {
     printf("index   next   data\n");
     for (int i = 0; i < size; i++) {
         printf("(%d, %d) data addr: %p\n", i, pbuffer[i].next, pbuffer[i].data);
     }
-    
 }
 
 /**
@@ -100,16 +99,16 @@ void showStaticList(static_link *pbuffer, static_link_t size)
  * @return NA
  */
 
-void initSingleList(single_list_t *slist)
+void k_slist_init(k_slist_t *slist)
 {
     slist->head = NULL;
     slist->tail = NULL;
 }
 
-void insertAtSingleList(single_list_t *slist, single_node_t *at, single_node_t *node)
+void k_slist_insert_at(k_slist_t *slist, k_snode_t *at, k_snode_t *node)
 {
     bool flag = false;
-    single_node_t * phead = slist->head;
+    k_snode_t * phead = slist->head;
 
     /* head node */
     if (slist->head == NULL && slist->tail == NULL) {
@@ -140,9 +139,9 @@ void insertAtSingleList(single_list_t *slist, single_node_t *at, single_node_t *
     }
 }
 
-void popSingleList(single_list_t *slist, bool tail, void **data)
+void k_slist_get(k_slist_t *slist, bool tail, void **data)
 {
-    single_node_t *phead = slist->head;
+    k_snode_t *phead = slist->head;
     bool flag = false;
 
     if (slist->head == NULL) {
@@ -169,16 +168,16 @@ void popSingleList(single_list_t *slist, bool tail, void **data)
     }
 }
 
-void showSingleList(single_list_t *slist)
+void k_slist_temp_show(k_slist_t *slist)
 {
-    single_node_t * phead = slist->head;
+    k_snode_t * phead = slist->head;
     while(phead != NULL) {
         printf("list node: %p\n", phead);
         phead = phead->next;
     }
 }
 
-void initDoubleList(double_list_t *dlist)
+void k_dlist_init(double_list_t *dlist)
 {
     dlist->head = NULL;
     dlist->tail = NULL;
@@ -189,7 +188,7 @@ void initDoubleList(double_list_t *dlist)
  * 
  * @return NA
  */
-void insertDoubleList(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node)
+void k_dlist_insert_at(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node)
 {
     dlist_node_t *phead = dlist->head;
     bool flag = false;
@@ -230,7 +229,7 @@ void insertDoubleList(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node)
     }
 }
 
-void popDoubleList(double_list_t *dlist, bool tail, void **data)
+void k_dlist_get(double_list_t *dlist, bool tail, void **data)
 {
     if (dlist->head == NULL) {
         printf("dlist is empty\n");
@@ -250,7 +249,7 @@ void popDoubleList(double_list_t *dlist, bool tail, void **data)
     }
 }
 
-void showDoubleList(double_list_t *dlist)
+void k_dlist_temp_show(double_list_t *dlist)
 {
     double_list_t *phead = dlist->head;
     int i = 0;
