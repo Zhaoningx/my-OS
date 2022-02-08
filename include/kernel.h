@@ -73,8 +73,7 @@ typedef struct stack k_stack_t;
 /* static queue */
 
 struct queue {
-    struct queue *head, *tail;
-    void *data;
+    k_slist_t *slist;
 };
 
 typedef struct queue k_queue_t;
@@ -101,9 +100,16 @@ void k_dlist_insert_at(double_list_t *dlist, dlist_node_t *at,dlist_node_t *node
 void k_dlist_get(double_list_t *dlist, bool tail, void **data);
 void k_dlist_temp_show(double_list_t *dlist);
 
-/* static stack */
+/* stack */
 void k_stack_init(k_stack_t *stack, stack_data_t *buffer, uint32_t size);
 void k_stack_push(k_stack_t *stack, stack_data_t data);
 void k_stack_pop(k_stack_t *stack, stack_data_t *data);
 void k_stack_temp_show(k_stack_t *stack);
+
+/* queue */
+void k_queue_init(k_queue_t *queue);
+void k_queue_append(k_queue_t *queue, k_snode_t *node);
+void k_queue_preappend(k_queue_t *queue, k_snode_t *node);
+void k_queue_get(k_queue_t *queue, void **node);
+void k_queue_temp_show(k_queue_t *queue);
 #endif /* _KERNEL_H_ */

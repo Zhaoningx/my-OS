@@ -122,6 +122,10 @@ void k_slist_insert_at(k_slist_t *slist, k_snode_t *at, k_snode_t *node)
         /* append node in the tail */
         slist->tail->next = node;
         slist->tail = node;
+    } else if (at == slist->head) {
+        /* preappend node before the head */
+        node->next = slist->head;
+        slist->head = node;
     } else {
         /* insert node after 'at' node */
         while (phead != NULL) {
@@ -148,19 +152,21 @@ void k_slist_get(k_slist_t *slist, bool tail, void **data)
         printf("empty list\n");
     }
 
+    if (slist->head->next == NULL) {
+        *data = slist->head;
+        slist->head = NULL;
+        slist->tail = NULL;
+        return;
+    }
+
     if (tail) {
         /* pop data from list tail */
         *data = slist->tail;
         while (phead->next != slist->tail) {
-            flag = true;
             phead = phead->next;
         }
-        if (flag) {
-            phead->next = NULL;
-            slist->tail = phead;
-        } else {
-            printf("Failed to get data from the tail\n");
-        }
+        phead->next = NULL;
+        slist->tail = phead;
     } else {
         /* pop data from list head */
         *data = slist->head;
@@ -171,8 +177,12 @@ void k_slist_get(k_slist_t *slist, bool tail, void **data)
 void k_slist_temp_show(k_slist_t *slist)
 {
     k_snode_t * phead = slist->head;
-    while(phead != NULL) {
+
+    while(true) {
         printf("list node: %p\n", phead);
+        if (phead == slist->tail) {
+            break;
+        }
         phead = phead->next;
     }
 }
