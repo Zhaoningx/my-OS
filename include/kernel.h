@@ -14,6 +14,8 @@ typedef char int8_t;
 typedef unsigned char uint8_t;
 typedef int int32_t;
 typedef unsigned int uint32_t;
+typedef long int int64_t;
+typedef long unsigned int uint64_t;
 
 
 /**
@@ -78,6 +80,15 @@ struct queue {
 
 typedef struct queue k_queue_t;
 
+/* ring buffer */
+struct ringbuffer {
+    uint32_t *buffer, *head, *tail, *base, *top;
+    uint32_t buffer_size;
+    bool empty;
+};
+
+typedef struct ringbuffer k_ringbuffer_t;
+
 /**
  * @brief function define
  * 
@@ -112,4 +123,11 @@ void k_queue_append(k_queue_t *queue, k_snode_t *node);
 void k_queue_preappend(k_queue_t *queue, k_snode_t *node);
 void k_queue_get(k_queue_t *queue, void **node);
 void k_queue_temp_show(k_queue_t *queue);
+
+/* ringbuffer */
+void k_ringbuffer_init(k_ringbuffer_t *ringbuffer, uint32_t *buffer, uint32_t size);
+void k_ringbuffer_insert(k_ringbuffer_t *ringbuffer, uint32_t data);
+void k_ringbuffer_get(k_ringbuffer_t *ringbuffer, uint32_t **data);
+void k_ringbuffer_temp_show(k_ringbuffer_t *ringbuffer);
+
 #endif /* _KERNEL_H_ */
